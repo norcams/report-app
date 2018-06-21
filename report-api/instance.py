@@ -11,6 +11,5 @@ def list_instances():
     return [INSTANCE[key] for key in sorted(INSTANCE.keys())]
 
 def add_instance_report(instance):
-    print instance
-    print app.config
+    app.logger.debug('report acccepted %s', instance)
     return 'report added for %s' % instance['ip'], 201
