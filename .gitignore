@@ -6,3 +6,4 @@ include/
 lib/
 local/
 lib64
+*.pyc
