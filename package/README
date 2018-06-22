@@ -1,1 +1,15 @@
-This can be used to create an rpm package for this application
+RPM package
+===========
+
+This can be used to create an rpm package for this application and can easily
+be extended to create deb packages.
+
+Example
+-------
+
+```
+cd packages
+make deps
+make build
+make rpm
+```
