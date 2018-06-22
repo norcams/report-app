@@ -23,7 +23,7 @@ definitions:
         description: 'instance hostname'
       uptime:
         type: integer
-        minimum: 1
+        minimum: 0
         description: 'uptime in days'
     required:
       - name
