@@ -7,3 +7,4 @@ lib/
 local/
 lib64
 *.pyc
+package/*.rpm

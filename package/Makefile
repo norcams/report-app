@@ -1,10 +1,11 @@
 NAME=report-app
 VERSION=1.0
-PACKAGE_VERSION=1
-DESCRIPTION=package.description
-URL=package.url
+PACKAGE_VERSION=2
+DESCRIPTION="Simple REST API for himlar"
+URL="https://github.com/norcams/report-api"
 MAINTAINER="https://github.com/norcams"
 RELVERSION=7
+INSTALL_DIR=/opt/report-app
 
 .PHONY: default
 default: deps build rpm
@@ -14,7 +15,7 @@ package: rpm
 clean:
 	rm -fr /installdir
 	rm -f $(NAME)-$(VERSION)-*.rpm
-	rm -Rf /tmp/vendor/
+	rm -Rf /vendor/
 
 .PHONY: deps
 deps:
@@ -24,15 +25,17 @@ deps:
 
 .PHONY: build
 build:
-	mkdir /tmp/vendor/
-	mkdir -p /installdir/opt/report-app
-	cd /tmp/vendor && git clone https://github.com/raykrist/report-app
-	cd /tmp/vendor/report-app && git submodule update --init
-	rsync -avh --exclude='.git/' /tmp/vendor/report-app/ /installdir/opt/report-app/
-	virtualenv /installdir/opt/report-app/
-	cd /installdir/opt/report-app/ && bin/pip install -r requirements.txt
-	cd /installdir/opt/report-app/ && bin/python setup.py install
-	echo "/opt/report-app" > /installdir/opt/report-app/lib/python2.7/site-packages/report_api.egg-link
+	mkdir /vendor
+	mkdir -p /installdir${INSTALL_DIR}
+
+	cd /vendor; git clone ${URL}
+	rsync -avh --exclude '.git' /vendor/himlarservice/ /installdir${INSTALL_DIR}
+	cd /installdir${INSTALL_DIR}; virtualenv --clear .
+	cd /installdir${INSTALL_DIR}; bin/python setup.py install
+	cd /installdir${INSTALL_DIR}; bin/pip install -r requirements.txt
+	cd /installdir${INSTALL_DIR}; virtualenv --relocatable .
+	# Hack
+	echo "/opt/report-app" > /tmp/installdir/opt/report-app/lib/python2.7/site-packages/report_api.egg-link
 
 .PHONY: rpm
 rpm:
@@ -40,8 +43,8 @@ rpm:
 		-n $(NAME) \
 		-v $(VERSION) \
 		--iteration "$(PACKAGE_VERSION).el$(RELVERSION)" \
-		--description "$(shell cat $(DESCRIPTION))" \
-		--url "$(shelpl cat $(URL))" \
-		--maintainer "$(MAINTAINER)" \
+		--description ${DESCRIPTION} \
+		--url ${URL} \
+		--maintainer ${MAINTAINER} \
 		-C /installdir/ \
-.
+		.
