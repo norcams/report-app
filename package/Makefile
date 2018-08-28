@@ -2,7 +2,7 @@ NAME=report-app
 VERSION=1.0
 PACKAGE_VERSION=2
 DESCRIPTION="Simple REST API for himlar"
-URL="https://github.com/norcams/report-api"
+URL="https://github.com/norcams/report-app"
 MAINTAINER="https://github.com/norcams"
 RELVERSION=7
 INSTALL_DIR=/opt/report-app
@@ -29,13 +29,17 @@ build:
 	mkdir -p /installdir${INSTALL_DIR}
 
 	cd /vendor; git clone ${URL}
-	rsync -avh --exclude '.git' /vendor/himlarservice/ /installdir${INSTALL_DIR}
+	rsync -avh --exclude '.git' /vendor/${NAME}/ /installdir${INSTALL_DIR}
 	cd /installdir${INSTALL_DIR}; virtualenv --clear .
+	cd /installdir${INSTALL_DIR}; bin/pip install -U setuptools
+	cd /installdir${INSTALL_DIR}; bin/pip install -U pip
+
 	cd /installdir${INSTALL_DIR}; bin/python setup.py install
 	cd /installdir${INSTALL_DIR}; bin/pip install -r requirements.txt
 	cd /installdir${INSTALL_DIR}; virtualenv --relocatable .
 	# Hack
-	echo "/opt/report-app" > /tmp/installdir/opt/report-app/lib/python2.7/site-packages/report_api.egg-link
+	echo "${INSTALL_DIR}" > /installdir${INSTALL_DIR}/lib/python2.7/site-packages/report_api.egg-link
+	sed -i 's/\/installdir\/opt/\/opt/g' /installdir${INSTALL_DIR}/bin/activate
 
 .PHONY: rpm
 rpm:
