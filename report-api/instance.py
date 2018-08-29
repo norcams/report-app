@@ -2,8 +2,10 @@ from flask import current_app as app
 
 INSTANCE = {
     'demo': {
-        'name': 'demo-api-instance',
-        'ip':   '127.0.0.1'
+        'name':     'demo-api-instance',
+        'ip':       '127.0.0.1',
+        'uptime':   10,
+        'updates':  2
     }
 }
 

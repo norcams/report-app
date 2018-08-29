@@ -25,14 +25,23 @@ definitions:
         type: integer
         minimum: 0
         description: 'uptime in days'
+      updates:
+        type: integer
+        minimum: 0
+        description: 'available security updates'
+      kernel:
+        type: string
+        description: 'kernel version'
     required:
       - name
       - ip
       - uptime
+      - updates
     example:
       name:    'demo-instance-01'
       ip:      '127.0.0.1'
       uptime:  10
+      updates: 2
 
 paths:
   /v1/instance:
@@ -46,13 +55,7 @@ paths:
         200:
           description: "Successful read instance list operation"
           schema:
-            type: "array"
-            items:
-              properties:
-                name:
-                  type: "string"
-                ip:
-                  type: "string"
+            $ref:  "#/definitions/instance"
     post:
       operationId: report-api.instance.add_instance_report
       tags:
