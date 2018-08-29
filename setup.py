@@ -15,7 +15,7 @@ config = {
         'flask==1.0.2',
         'connexion==1.4.2'
     ],
-    'packages': ['report-api'],
+    'packages': ['api'],
     'scripts': [],
     'name': 'report-api'
 }

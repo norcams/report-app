@@ -46,7 +46,7 @@ definitions:
 paths:
   /v1/instance:
     get:
-      operationId:  "report-api.instance.list_instances"
+      operationId:  "api.instance.list_instances"
       tags:
         - Instance
       summary:      "Get instance report"
@@ -57,7 +57,7 @@ paths:
           schema:
             $ref:  "#/definitions/instance"
     post:
-      operationId: report-api.instance.add_instance_report
+      operationId: api.instance.add_instance_report
       tags:
         - Instance
       summary: Add a new instance report
