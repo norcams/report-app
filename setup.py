@@ -13,9 +13,10 @@ config = {
     'version': '0.1',
     'install_requires': [
         'flask==1.0.2',
-        'connexion==1.4.2'
+        'connexion==1.5.2',
+        'bcrypt==3.1.4'
     ],
-    'packages': ['api'],
+    'packages': ['api', 'oauth'],
     'scripts': [],
     'name': 'report-api'
 }

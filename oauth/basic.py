@@ -17,12 +17,13 @@ def get_tokeninfo():
         for user in users:
             if bcrypt.checkpw(access_token.encode('utf8'), user.token_hash.encode('utf8')):
                 auth_user = user
+                app.logger.debug('user authentication for %s', user.name)
                 break
 
     if not auth_user:
+        app.logger.debug('authentication failed')
         return 'No such bearer token', 401
-
-    return {'uid': auth_user.name, 'scope': list(auth_user.scope)}
+    return {'uid': auth_user.name, 'scope': list(auth_user.scope)}, 200
 
 def dialog():
     return 'Not implemented', 200

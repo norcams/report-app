@@ -5,17 +5,6 @@ from sqlalchemy import literal
 
 db = SQLAlchemy()
 
-# class Status(db.Model):
-#     __tablename__ = 'status'
-#     id = db.Column(db.Integer, primary_key=True)
-#     timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
-#     message = db.Column(db.Text)
-#
-#     def __repr__(self):
-#         return '<Status %r>' % self.id
-
-scopes = ['admin', 'read']
-
 class Tokens(db.Model):
     __tablename__ = 'tokens'
     id = db.Column(db.Integer, primary_key=True)
