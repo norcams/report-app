@@ -1,0 +1,54 @@
+swagger: "2.0"
+
+info:
+  title: Simple OAuth Bearer Token Info
+  version: "1.0.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/oauth2"
+
+definitions:
+  token:
+    description: Token info object
+    type: object
+    properties:
+      uid:
+        type: string
+        description: username
+      scope:
+        type: array
+        description: scope for this user
+        items:
+          type: string
+    example:
+      uid:  'himlarcli'
+      scope:
+        - admin
+
+paths:
+  /tokeninfo:
+    get:
+      summary: OAuth2 token info
+      operationId: oauth.basic.get_tokeninfo
+      responses:
+        200:
+          description: Token info object
+          schema:
+            $ref:  "#/definitions/token"
+  /token:
+    get:
+      summary: OAuth2 token
+      operationId: oauth.basic.token
+      responses:
+        200:
+          description: Not implemented
+  /dialog:
+    get:
+      summary: OAuth2 dialog
+      operationId: oauth.basic.dialog
+      responses:
+        200:
+          description: Not implemented
