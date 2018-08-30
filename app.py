@@ -14,6 +14,9 @@ token_url = app.app.config.get('TOKENINFO_URL')
 if token_url:
     os.environ['TOKENINFO_URL'] = token_url
 
+# requests will not use the default distro ca-bundle (with our own ca added)
+os.environ['REQUESTS_CA_BUNDLE'] = '/etc/pki/tls/certs/ca-bundle.crt'
+
 # Read the api.yaml file to configure the endpoints
 app.add_api('api/api.yaml', strict_validation=True)
 app.add_api('oauth/oauth2.yaml', strict_validation=True)
