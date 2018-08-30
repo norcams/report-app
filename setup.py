@@ -14,7 +14,9 @@ config = {
     'install_requires': [
         'flask==1.0.2',
         'connexion==1.5.2',
-        'bcrypt==3.1.4'
+        'Flask-SQLAlchemy==2.3.2',
+        'bcrypt',
+        'PyMySQL'
     ],
     'packages': ['api', 'oauth'],
     'scripts': [],
