@@ -56,6 +56,9 @@ paths:
           description: "Successful read instance list operation"
           schema:
             $ref:  "#/definitions/instance"
+      security:
+        # enable authentication and require the "uid" scope for this endpoint
+        - oauth2: ['admin']
     post:
       operationId: api.instance.add_instance_report
       tags:
@@ -72,3 +75,14 @@ paths:
       responses:
         201:
           description: Successful added instance report
+
+securityDefinitions:
+  oauth2:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: /oauth2/dialog
+    # you can also pass it as an environment variable TOKENINFO_URL
+    #x-tokenInfoUrl: http://172.31.0.1:8080/oauth2/tokeninfo
+    scopes:
+      admin: Admin access to the service
+      read: Read access to the service

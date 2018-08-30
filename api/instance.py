@@ -1,5 +1,7 @@
 from flask import current_app as app
 from flask_sqlalchemy import SQLAlchemy
+from models import db
+from models import Status
 
 INSTANCE = {
     'demo': {
