@@ -1,20 +1,24 @@
 from flask import current_app as app
 from flask_sqlalchemy import SQLAlchemy
 from models import db
-from models import Status
+from models import Instance
+from connexion import NoContent
+import datetime
 
-INSTANCE = {
-    'demo': {
-        'name':     'demo-api-instance',
-        'ip':       '127.0.0.1',
-        'uptime':   10,
-        'updates':  2
-    }
-}
+def get_instances(limit):
+    instances = Instance.query.order_by(Instance.timestamp.desc())
+    return [s.dump() for s in instances.all()][:limit]
 
-def list_instances():
-    return [INSTANCE[key] for key in sorted(INSTANCE.keys())]
-
-def add_instance_report(instance):
-    app.logger.debug('report acccepted %s', instance)
-    return 'report added for %s' % instance['ip'], 201
+def put_instance(instance):
+    i = db.session.query(Instance).filter(Instance.ip == instance['ip']).one_or_none()
+    #i = Instance.query().filter(Instance.ip == instance['ip']).one_or_none()
+    if i is not None:
+        app.logger.info('Updating instance with ip %s..', instance['ip'])
+        instance['timestamp'] = datetime.datetime.now()
+        #db.update(Instance).where(Instance.ip == instance['ip']).values(**instance)
+        i.update(instance)
+    else:
+        app.logger.info('Creating instance with ip %s..', instance['ip'])
+        db.session.add(Instance(**instance))
+    db.session.commit()
+    return NoContent, (200 if i is not None else 201)

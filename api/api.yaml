@@ -16,51 +16,88 @@ definitions:
     type: object
     properties:
       ip:
-        type: string
-        description: 'private or public IPv4 address'
+        type:         string
+        description:  private or public IPv4 address
       name:
-        type: string
-        description: 'instance hostname'
+        type:         string
+        description:  instance hostname
       uptime:
-        type: integer
-        minimum: 0
-        description: 'uptime in days'
+        type:         integer
+        minimum:      0
+        description:  'uptime in days'
       updates:
-        type: integer
-        minimum: 0
-        description: 'available security updates'
+        type:         integer
+        minimum:      0
+        description:  'available security updates'
       kernel:
-        type: string
-        description: 'kernel version'
+        type:         string
+        description:  kernel version
+      md5sum:
+        type:         string
+        maxLength:    32
     required:
       - name
       - ip
       - uptime
       - updates
     example:
-      name:    'demo-instance-01'
-      ip:      '127.0.0.1'
-      uptime:  10
-      updates: 2
+      name:           'demo-instance-01'
+      ip:             '127.0.0.1'
+      uptime:         10
+      updates:        2
+      kernel:         '3.13.0-153-generic'
+      md5sum:         '7899dac95e3d5c85a7a5e86f46c34f6e'
+  status:
+    type:             object
+    description:      status message object
+    properties:
+      id:
+        type:         integer
+        description:  status message unique id
+        readOnly:     true
+        example:      1002
+      timestamp:
+        type:         string
+        format:       date-time
+        description:  timestamp for the status message
+        readOnly:     true
+      message:
+        type:         string
+        description:  status message text
+      message_type:
+        type:         string
+        description:  status message type
+    required:
+      - message
+    example:
+      id: 1002
+      timestamp:      2018-08-31 08:38:34
+      message:        'The new gold image for Fedora 56 is now available'
+      message_type:   important
 
 paths:
   /v1/instance:
     get:
-      operationId:  "api.instance.list_instances"
+      operationId:  "api.instance.get_instances"
       tags:
         - Instance
       summary:      "Get instance report"
       description:  "Get the list of instances"
+      parameters:
+        - name: limit
+          in: query
+          type: integer
+          minimum: 0
+          default: 10
       responses:
         200:
           description: "Successful read instance list operation"
           schema:
             $ref:  "#/definitions/instance"
       security:
-        # enable authentication and require the "uid" scope for this endpoint
-        - oauth2: ['admin']
+       - oauth2: ['admin']
     post:
-      operationId: api.instance.add_instance_report
+      operationId: api.instance.put_instance
       tags:
         - Instance
       summary: Add a new instance report
@@ -73,8 +110,48 @@ paths:
           schema:
             $ref:  "#/definitions/instance"
       responses:
+        200:
+          description: Successful updated instance with a new report
         201:
-          description: Successful added instance report
+          description: Successful added instance with a new report
+  /v1/status:
+    get:
+      operationId:  "api.status.get_status"
+      tags:
+        - Status
+      summary: Get status message
+      description: Get status message
+      parameters:
+        - name: limit
+          in: query
+          type: integer
+          minimum: 0
+          default: 10
+        - name: message_type
+          in: query
+          type: string
+          pattern: "^[a-z]*$"
+      responses:
+        200:
+          description: "Successful read status list operation"
+          schema:
+            $ref:  "#/definitions/status"
+    post:
+      operationId:  "api.status.put_status"
+      tags:
+        - Status
+      parameters:
+        - name: status
+          in: body
+          description: status report to add
+          required: True
+          schema:
+            $ref:  "#/definitions/status"
+      responses:
+        201:
+          description: New status message added
+      security:
+       - oauth2: ['admin']
 
 securityDefinitions:
   oauth2:
@@ -84,5 +161,5 @@ securityDefinitions:
     # you can also pass it as an environment variable TOKENINFO_URL
     #x-tokenInfoUrl: http://172.31.0.1:8080/oauth2/tokeninfo
     scopes:
-      admin: Admin access to the service
-      read: Read access to the service
+      admin: Admin access to the services
+      read: Read access to the instance service
