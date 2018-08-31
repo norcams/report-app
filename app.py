@@ -33,6 +33,11 @@ def docs():
     output += '<li><a href=' + request.base_url + 'oauth2/ui' + '>oauth docs</a></li></ul>'
     return output
 
+@app.app.teardown_appcontext
+def shutdown_session(exception=None):
+    oauth_db.session.remove()
+    api_db.session.remove()
+
 if __name__ == '__main__':
     host = app.app.config.get('HOST', '0.0.0.0')
     debug = app.app.config.get('DEBUG', False)
