@@ -95,7 +95,7 @@ paths:
           schema:
             $ref:  "#/definitions/instance"
       security:
-       - oauth2: ['admin']
+       - oauth2: ['read']
     post:
       operationId: api.instance.put_instance
       tags:
