@@ -13,7 +13,7 @@ from sqlalchemy import literal
 import argparse
 
 app = Flask(__name__)
-app.config.from_pyfile('production.cfg')
+app.config.from_pyfile('/etc/himlar/production.cfg')
 
 actions = ['create', 'delete']
 
