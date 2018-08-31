@@ -27,7 +27,6 @@ definitions:
         description:  'uptime in days'
       updates:
         type:         integer
-        minimum:      0
         description:  'available security updates'
       kernel:
         type:         string
