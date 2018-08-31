@@ -37,6 +37,7 @@ def docs():
 def shutdown_session(exception=None):
     oauth_db.session.remove()
     api_db.session.remove()
+    app.app.logger.debug('close db session')
 
 if __name__ == '__main__':
     host = app.app.config.get('HOST', '0.0.0.0')
