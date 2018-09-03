@@ -18,6 +18,8 @@ definitions:
       ip:
         type:         string
         description:  private or public IPv4 address
+        minLength:    8
+        maxLength:    16
       name:
         type:         string
         description:  instance hostname

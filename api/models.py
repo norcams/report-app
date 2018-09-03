@@ -20,7 +20,7 @@ class Status(db.Model):
 
 class Instance(db.Model):
     __tablename__ = 'instances'
-    ip = db.Column(db.String(12), primary_key=True)
+    ip = db.Column(db.String(16), primary_key=True)
     name = db.Column(db.String(127), nullable=False)
     kernel = db.Column(db.String(127))
     md5sum = db.Column(db.String(32))
