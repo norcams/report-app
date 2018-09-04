@@ -18,36 +18,64 @@ definitions:
       ip:
         type:         string
         description:  private or public IPv4 address
-        minLength:    8
-        maxLength:    16
+        minLength:    7
+        maxLength:    15
+        pattern:      '^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$'
+        example:      '127.0.0.1'
       name:
         type:         string
         description:  instance hostname
+        example:      'demo-instance-01'
       uptime:
         type:         integer
         minimum:      0
         description:  'uptime in days'
+        example:      10
       updates:
         type:         integer
         description:  'available security updates'
+        example:      2
       kernel:
         type:         string
         description:  kernel version
+        example:      '3.13.0-153-generic'
       md5sum:
         type:         string
         maxLength:    32
+        example:      '7899dac95e3d5c85a7a5e86f46c34f6e'
     required:
       - name
       - ip
       - uptime
       - updates
-    example:
-      name:           'demo-instance-01'
-      ip:             '127.0.0.1'
-      uptime:         10
-      updates:        2
-      kernel:         '3.13.0-153-generic'
-      md5sum:         '7899dac95e3d5c85a7a5e86f46c34f6e'
+  instance_with_owner:
+    allOf:
+      - $ref:  "#/definitions/instance"
+      - type: object
+        description: instance with owner information
+        properties:
+          admin:
+            type:         string
+            description:  project administrator
+            example:      'kari.normann@uib.no'
+          organization:
+            type:         string
+            description:  project administrator organization
+            example:      'uib'
+          project_name:
+            type:         string
+            description:  project name
+            example:      'uib-ita-application'
+          user:
+            type:         string
+            description:  instance creator
+            example:      'kari.normann@uib.no'
+          timestamp:
+            type:         string
+            format:       date-time
+            description:  last updated
+            example:      '2018-09-04T12:45:00Z'
+            readOnly:     true
   status:
     type:             object
     description:      status message object
@@ -90,13 +118,19 @@ paths:
           type: integer
           minimum: 0
           default: 10
+        - name: org
+          in: query
+          type: string
+          pattern: "^[a-z]*$"
+          minLength: 1
+          maxLength: 32
       responses:
         200:
           description: "Successful read instance list operation"
           schema:
-            $ref:  "#/definitions/instance"
+            $ref:  "#/definitions/instance_with_owner"
       security:
-       - oauth2: ['read']
+        - oauth2: ['read']
     post:
       operationId: api.instance.put_instance
       tags:

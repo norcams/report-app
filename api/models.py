@@ -1,7 +1,27 @@
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import Model, SQLAlchemy
 
-db = SQLAlchemy()
+class ApiModel(Model):
+    """ Model class for all our models.
+        This will included shared functions. """
+
+    # def keys(self):
+    #     return dict([k for k, v in vars(self).items() if not k.startswith('_')])
+
+    def dump(self):
+        return dict([(k, v) for k, v in vars(self).items() if not k.startswith('_')])
+
+    def join(self, obj):
+        dump = self.dump()
+        dump.update(obj)
+        return dump
+
+    def update(self, attributes):
+        for k,v in attributes.iteritems():
+            setattr(self, k, v)
+
+# Make user we use our model class
+db = SQLAlchemy(model_class=ApiModel)
 
 class Status(db.Model):
     __message_types = ['info', 'important']
@@ -13,10 +33,6 @@ class Status(db.Model):
 
     def __repr__(self):
         return '<Status %r>' % self.id
-
-    def dump(self):
-        return dict([(k, v) for k, v in vars(self).items() if not k.startswith('_')])
-
 
 class Instance(db.Model):
     __tablename__ = 'instances'
@@ -31,9 +47,14 @@ class Instance(db.Model):
     def __repr__(self):
         return '<Instance %r>' % self.ip
 
-    def dump(self):
-        return dict([(k, v) for k, v in vars(self).items() if not k.startswith('_')])
+class Owner(db.Model):
+    __tablename__ = 'owners'
+    ip = db.Column(db.String(16), primary_key=True)
+    organization = db.Column(db.String(16), nullable=False)
+    project_name = db.Column(db.String(255), nullable=False)
+    admin = db.Column(db.String(255))
+    user = db.Column(db.String(255))
+    timestamp = db.Column(db.DateTime, default=datetime.now)
 
-    def update(self, attributes):
-        for k,v in attributes.iteritems():
-            setattr(self, k, v)
+    def __repr__(self):
+        return '<Owner %r>' % self.project_name
