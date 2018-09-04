@@ -73,9 +73,13 @@ definitions:
           timestamp:
             type:         string
             format:       date-time
-            description:  last updated
+            description:  time of last update
             example:      '2018-09-04T12:45:00Z'
             readOnly:     true
+          instance_id:
+            type:         string
+            description:  unique instance id
+            example:      f57589ac-5e46-4398-a592-9d8ac32f025f
   status:
     type:             object
     description:      status message object

@@ -55,6 +55,7 @@ class Owner(db.Model):
     admin = db.Column(db.String(255))
     user = db.Column(db.String(255))
     timestamp = db.Column(db.DateTime, default=datetime.now)
+    instance_id = db.Column(db.String(63))
 
     def __repr__(self):
         return '<Owner %r>' % self.project_name
