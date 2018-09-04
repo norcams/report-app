@@ -2,7 +2,7 @@
 swagger: '2.0'
 info:
   description: UH-IaaS instance report API
-  version: "1.0.0"
+  version: "1.2.1"
   title: UH-IaaS instance report API
 consumes:
   - "application/json"
