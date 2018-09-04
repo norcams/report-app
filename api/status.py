@@ -12,7 +12,18 @@ def get_status(limit, message_type=None):
     return [s.dump() for s in status.all()][:limit]
 
 def put_status(status):
+    app.logger.info('Add status message "%s" ..', status['message'])
     status = Status(message=status['message'])
     db.session.add(status)
     db.session.commit()
     return NoContent, 200
+
+def delete_status(status_id):
+    status = Status.query.filter_by(id=status_id).first()
+    if status is not None:
+        app.logger.info('Deleting status message with id=%s ..', status_id)
+        db.session.delete(status)
+        db.session.commit()
+        return NoContent, 204
+    else:
+        return NoContent, 404

@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -7,7 +7,7 @@ class Status(db.Model):
     __message_types = ['info', 'important']
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
     message_type = db.Column(db.Enum(*__message_types), server_default='info')
     message = db.Column(db.Text,  nullable=False)
 
@@ -26,7 +26,7 @@ class Instance(db.Model):
     md5sum = db.Column(db.String(32))
     updates = db.Column(db.Integer, nullable=False)
     uptime = db.Column(db.Integer, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
 
     def __repr__(self):
         return '<Instance %r>' % self.ip

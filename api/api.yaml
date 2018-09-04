@@ -152,7 +152,26 @@ paths:
         201:
           description: New status message added
       security:
-       - oauth2: ['admin']
+        - oauth2: ['admin']
+  /v1/status/{status_id}:
+    delete:
+      operationId:  "api.status.delete_status"
+      tags:
+        - Status
+      parameters:
+        - name: status_id
+          description: Unique status message id
+          in: path
+          type: integer
+          required: true
+          minLength: 1
+      responses:
+        204:
+          description: status was deleted
+        404:
+          description: status does not exist
+      security:
+        - oauth2: ['admin']
 
 securityDefinitions:
   oauth2:
