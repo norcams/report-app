@@ -1,5 +1,5 @@
 NAME=report-app
-VERSION=1.0.1
+VERSION=1.2.0
 PACKAGE_VERSION=1
 DESCRIPTION="Simple REST API for himlar"
 URL="https://github.com/norcams/report-app"
