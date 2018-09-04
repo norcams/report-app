@@ -13,7 +13,8 @@ def get_status(limit, message_type=None):
 
 def put_status(status):
     app.logger.info('Add status message "%s" ..', status['message'])
-    status = Status(message=status['message'])
+    message_type = status.get('message_type', None)
+    status = Status(message=status['message'], message_type=message_type)
     db.session.add(status)
     db.session.commit()
     return NoContent, 200
