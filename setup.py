@@ -16,7 +16,8 @@ config = {
         'connexion==1.5.2',
         'Flask-SQLAlchemy==2.3.2',
         'bcrypt',
-        'PyMySQL'
+        'PyMySQL',
+        'Flask-Cors'
     ],
     'packages': ['api', 'oauth'],
     'scripts': [],

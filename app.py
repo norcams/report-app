@@ -1,10 +1,13 @@
 import os
 import connexion
+from flask_cors import CORS
 from flask import request
 from api.models import db as api_db
 from oauth.models import db as oauth_db
 
 app = connexion.App(__name__, specification_dir='./')
+
+cors = CORS(app.app, resources={r"/api/v1/status*": {"origins": "*"}})
 
 # Production server config
 app.app.config.from_pyfile('/etc/himlar/production.cfg')
@@ -18,8 +21,8 @@ if token_url:
 os.environ['REQUESTS_CA_BUNDLE'] = '/etc/pki/tls/certs/ca-bundle.crt'
 
 # Read the api.yaml file to configure the endpoints
-app.add_api('api/api.yaml', strict_validation=True)
-app.add_api('oauth/oauth2.yaml', strict_validation=True)
+app.add_api('api/api.yaml', strict_validation=True, validate_responses=False)
+app.add_api('oauth/oauth2.yaml', strict_validation=True, validate_responses=True)
 
 # Database setup - this will make import db work inside packages without more sql config
 oauth_db.init_app(app.app)
