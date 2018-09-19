@@ -99,6 +99,8 @@ definitions:
         description:  status message text
       message_type:
         type:         string
+        maxLength:    16
+        pattern:      '^([a-z]{4,10})$'
         description:  status message type
     required:
       - message

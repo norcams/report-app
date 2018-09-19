@@ -24,7 +24,7 @@ class ApiModel(Model):
 db = SQLAlchemy(model_class=ApiModel)
 
 class Status(db.Model):
-    __message_types = ['info', 'important']
+    __message_types = ['info', 'important', 'event']
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.now)
