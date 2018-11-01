@@ -1,5 +1,5 @@
 NAME=report-app
-VERSION=1.2.2
+VERSION=1.3.0
 PACKAGE_VERSION=1
 DESCRIPTION="Simple REST API for himlar"
 URL="https://github.com/norcams/report-app"
@@ -40,6 +40,9 @@ build:
 	# Hack
 	echo "${INSTALL_DIR}" > /installdir${INSTALL_DIR}/lib/python2.7/site-packages/report_api.egg-link
 	sed -i 's/\/installdir\/opt/\/opt/g' /installdir${INSTALL_DIR}/bin/activate
+	# version file
+	cd  /vendor/${NAME}; echo "commit: `git log --pretty=format:'%h' -n 1`" > /installdir${INSTALL_DIR}/version.yaml
+	echo "version: ${VERSION}" >> /installdir${INSTALL_DIR}/version.yaml
 
 .PHONY: rpm
 rpm:
