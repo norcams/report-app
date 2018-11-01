@@ -1,7 +1,12 @@
 import os
+import json
+import socket
 import connexion
+import yaml
+import pymysql
 from flask_cors import CORS
 from flask import request
+from flask import Response
 from api.models import db as api_db
 from oauth.models import db as oauth_db
 
@@ -35,6 +40,28 @@ def docs():
     output += '<ul><li><a href=' + request.base_url + 'api/ui' + '>report api docs</a></li>'
     output += '<li><a href=' + request.base_url + 'oauth2/ui' + '>oauth docs</a></li></ul>'
     return output
+
+@app.route("/health")
+def health():
+    version = './version.yaml'
+    with open(version, 'r') as stream:
+        try:
+            output = yaml.load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+            output = dict()
+    # check db health
+    try:
+        api_db.engine.execute('SELECT 1')
+        code = 200
+        output['database'] = 'ok'
+    except Exception as e:
+        output['database'] = 'error'
+        code = 503
+    output['remote_addr'] = request.remote_addr
+    output['host'] = socket.gethostname()
+    msg = json.dumps(output, sort_keys=True, indent=4)
+    return Response(msg, mimetype='text/json', status=code)
 
 @app.app.teardown_appcontext
 def shutdown_session(exception=None):
