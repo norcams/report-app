@@ -1,4 +1,4 @@
 import os
-os.environ['PYTHON_EGG_CACHE'] = '/var/cache/httpd/python-eggs'
+os.environ['PYTHON_EGG_CACHE'] = '/tmp/python-eggs'
 from app import app as application
 
