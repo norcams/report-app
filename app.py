@@ -43,8 +43,10 @@ def docs():
 
 @app.route("/health")
 def health():
-    version = './version.yaml'
-    with open(version, 'r') as stream:
+    version = 'version.yaml'
+    script_dir = os.path.dirname(__file__)
+    abs_file_path = os.path.join(script_dir, version)
+    with open(abs_file_path, 'r') as stream:
         try:
             output = yaml.load(stream)
         except yaml.YAMLError as exc:
