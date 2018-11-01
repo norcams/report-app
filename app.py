@@ -60,7 +60,10 @@ def health():
     except Exception as e:
         output['database'] = 'error'
         code = 503
-    output['remote_addr'] = request.remote_addr
+    if request.headers.get("X-Forwarded-For"):
+        output['remote_addr'] = request.headers.get("X-Forwarded-For")
+    else:
+        output['remote_addr'] = request.remote_addr
     output['host'] = socket.gethostname()
     msg = json.dumps(output, sort_keys=True, indent=4)
     return Response(msg, mimetype='text/json', status=code)
