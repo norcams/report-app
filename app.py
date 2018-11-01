@@ -37,8 +37,8 @@ api_db.init_app(app.app)
 @app.route("/")
 def docs():
     output = "<h2>UH-IaaS report rest API server</h2>"
-    output += '<ul><li><a href=' + request.base_url + 'api/ui' + '>report api docs</a></li>'
-    output += '<li><a href=' + request.base_url + 'oauth2/ui' + '>oauth docs</a></li></ul>'
+    output += '<ul><li><a href=/api/ui>report api docs</a></li>'
+    output += '<li><a href=/oauth2/ui>oauth docs</a></li></ul>'
     return output
 
 @app.route("/health")
