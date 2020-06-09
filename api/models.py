@@ -26,6 +26,8 @@ db = SQLAlchemy(model_class=ApiModel)
 class Status(db.Model):
     __message_types = ['info', 'important', 'event']
     __tablename__ = 'status'
+    __table_args__ = {'mysql_engine':'InnoDB'}
+
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.now)
     message_type = db.Column(db.Enum(*__message_types), server_default='info')
@@ -36,6 +38,8 @@ class Status(db.Model):
 
 class Instance(db.Model):
     __tablename__ = 'instances'
+    __table_args__ = {'mysql_engine':'InnoDB'}
+
     ip = db.Column(db.String(16), primary_key=True)
     name = db.Column(db.String(127), nullable=False)
     kernel = db.Column(db.String(127))
