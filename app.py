@@ -48,7 +48,7 @@ def health():
     abs_file_path = os.path.join(script_dir, version)
     with open(abs_file_path, 'r') as stream:
         try:
-            output = yaml.load(stream)
+            output = yaml.full_load(stream)
         except yaml.YAMLError as exc:
             print(exc)
             output = dict()
