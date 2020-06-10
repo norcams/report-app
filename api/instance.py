@@ -1,9 +1,9 @@
 from flask import current_app as app
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
-from models import db
-from models import Instance
-from models import Owner
+from .models import db
+from .models import Instance
+from .models import Owner
 from connexion import NoContent
 import datetime
 import json

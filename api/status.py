@@ -1,9 +1,12 @@
+from connexion import NoContent
 from flask import current_app as app
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from models import db
 from models import Status
 from connexion import NoContent
+from .models import db
+from .models import Status
 
 def get_status(limit, message_type=None):
     status = Status.query.order_by(Status.id.desc())

@@ -1,8 +1,8 @@
 import bcrypt
 from flask import current_app as app
 from connexion import request
-from models import db
-from models import Tokens
+from .models import db
+from .models import Tokens
 
 def get_tokeninfo():
     try:

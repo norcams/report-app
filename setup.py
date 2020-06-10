@@ -12,9 +12,9 @@ config = {
     'author_email': 'raymond.Kristiansen@uib.no',
     'version': '0.1',
     'install_requires': [
-        'flask==1.0.2',
-        'connexion==1.5.2',
-        'Flask-SQLAlchemy==2.3.2',
+        'flask==1.1.2',
+        'connexion[swagger-ui]==2.7.0',
+        'Flask-SQLAlchemy==2.4.3',
         'bcrypt',
         'PyMySQL',
         'Flask-Cors'
