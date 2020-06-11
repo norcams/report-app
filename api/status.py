@@ -2,9 +2,6 @@ from connexion import NoContent
 from flask import current_app as app
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
-from models import db
-from models import Status
-from connexion import NoContent
 from .models import db
 from .models import Status
 
