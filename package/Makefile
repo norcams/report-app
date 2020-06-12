@@ -1,5 +1,5 @@
 NAME=report-app
-VERSION=1.3.1
+VERSION=1.4.0
 PACKAGE_VERSION=1
 DESCRIPTION="Simple REST API for himlar"
 URL="https://github.com/norcams/report-app"
@@ -19,9 +19,11 @@ clean:
 
 .PHONY: deps
 deps:
-	yum install -y gcc ruby-devel rpm-build
-	gem install -N fpm
-	yum install -y python-devel python-virtualenv git libyaml-devel
+	yum install -y gcc rpm-build centos-release-scl
+	yum install -y rh-ruby23 rh-ruby23-ruby-devel httpd-devel
+	source /opt/rh/rh-ruby23/enable; gem install -N fpm
+	yum install -y python python3-devel python-virtualenv git libyaml-devel
+
 
 .PHONY: build
 build:
@@ -30,15 +32,15 @@ build:
 
 	cd /vendor; git clone ${URL}
 	rsync -avh --exclude '.git' /vendor/${NAME}/ /installdir${INSTALL_DIR}
-	cd /installdir${INSTALL_DIR}; virtualenv --clear .
+	cd /installdir${INSTALL_DIR}; virtualenv --clear -p /bin/python3 .
 	cd /installdir${INSTALL_DIR}; bin/pip install -U setuptools
 	cd /installdir${INSTALL_DIR}; bin/pip install -U pip
 
 	cd /installdir${INSTALL_DIR}; bin/python setup.py install
-	cd /installdir${INSTALL_DIR}; bin/pip install -r requirements.txt
-	cd /installdir${INSTALL_DIR}; virtualenv --relocatable .
+	#cd /installdir${INSTALL_DIR}; bin/pip install -r requirements.txt
+	cd /installdir${INSTALL_DIR}; virtualenv --relocatable -p /bin/python3 .
 	# Hack
-	echo "${INSTALL_DIR}" > /installdir${INSTALL_DIR}/lib/python2.7/site-packages/report_api.egg-link
+	# echo "${INSTALL_DIR}" > /installdir${INSTALL_DIR}/lib/python2.7/site-packages/report_api.egg-link
 	sed -i 's/\/installdir\/opt/\/opt/g' /installdir${INSTALL_DIR}/bin/activate
 	# version file
 	cd  /vendor/${NAME}; echo "commit: `git log --pretty=format:'%h' -n 1`" > /installdir${INSTALL_DIR}/version.yaml
@@ -46,7 +48,7 @@ build:
 
 .PHONY: rpm
 rpm:
-	/usr/local/bin/fpm -s dir -t rpm \
+	source /opt/rh/rh-ruby23/enable; fpm -s dir -t rpm \
 		-n $(NAME) \
 		-v $(VERSION) \
 		--iteration "$(PACKAGE_VERSION).el$(RELVERSION)" \
