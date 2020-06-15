@@ -36,16 +36,16 @@ def action_create():
         scope = literal(','.join(options.scope))
         db.session.add(Tokens(token_hash=token_hash, name=options.name, scope=scope))
         db.session.commit()
-        print 'token: %s with scope %s' % (token, ','.join(options.scope))
+        print('token: {} with scope {}'.format(token, ','.join(options.scope)))
 
 def action_delete():
     with app.app_context():
         db.init_app(app)
         users = Tokens.query.filter_by(name=options.name).all()
         for u in users:
-             db.session.delete(u)
+            db.session.delete(u)
         db.session.commit()
-        print 'delete all users with name %s' % options.name
+        print('delete all users with name {}'.format(options.name))
 
 
 # Run local function with the same name as the action (Note: - => _)

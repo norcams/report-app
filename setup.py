@@ -5,7 +5,7 @@ except ImportError:
     from distutils.core import setup
 
 config = {
-    'description': 'IaaS report api',
+    'description': 'NREC report api',
     'author': 'Raymond Kristiansen',
     'url': 'https://github.com/norcams/report-app',
     'download_url': 'https://github.com/norcams/report-app',
@@ -23,7 +23,7 @@ config = {
     'packages': ['api', 'oauth'],
     'scripts': [],
     'name': 'report-api',
-    'options': { "bdist_wheel": {"universal": "1"}},
+    'options': {"bdist_wheel": {"universal": "1"}},
 }
 
 setup(**config)

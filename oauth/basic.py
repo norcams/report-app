@@ -1,13 +1,12 @@
 import bcrypt
 from flask import current_app as app
 from connexion import request
-from .models import db
 from .models import Tokens
 
 def get_tokeninfo():
     try:
         _, access_token = request.headers['Authorization'].split()
-    except Exception:
+    except ValueError:
         access_token = ''
 
     auth_user = None
@@ -17,7 +16,7 @@ def get_tokeninfo():
         for user in users:
             if bcrypt.checkpw(access_token.encode('utf8'), user.token_hash.encode('utf8')):
                 auth_user = user
-                app.logger.debug('user authentication for %s', user.name)
+                app.logger.debug('user authentication for {}'.format(user.name))
                 break
 
     if not auth_user:

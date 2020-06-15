@@ -17,7 +17,7 @@ class ApiModel(Model):
         return dump
 
     def update(self, attributes):
-        for k,v in attributes.iteritems():
+        for k, v in attributes.iteritems():
             setattr(self, k, v)
 
 # Make user we use our model class
@@ -31,7 +31,7 @@ class Status(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.now)
     message_type = db.Column(db.Enum(*__message_types), server_default='info')
-    message = db.Column(db.Text,  nullable=False)
+    message = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
         return '<Status %r>' % self.id
