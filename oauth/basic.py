@@ -6,7 +6,7 @@ from .models import Tokens
 def get_tokeninfo():
     try:
         _, access_token = request.headers['Authorization'].split()
-    except ValueError:
+    except KeyError:
         access_token = ''
 
     auth_user = None
