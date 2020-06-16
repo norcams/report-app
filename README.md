@@ -24,3 +24,13 @@ python setup.py develop
 ```
 python app.py
 ```
+
+**Test example with curl**
+
+```
+curl -X POST -H "Authorization: Bearer xg7ek8fj2HmOk3Qff95pgbmQCv4ZpGeH" \
+-H 'Content-Type: application/json' \
+-H 'Accept: application/problem+json' \
+-d '{"message": "The new gold image for Fedora 56 is now available", "message_type": "important" }' \
+'https://report.vagrant.iaas.intern/api/v1/status'
+```
