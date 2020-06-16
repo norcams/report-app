@@ -216,8 +216,8 @@ paths:
           description: status was deleted
         404:
           description: status does not exist
-      # security:
-      #   - oauth2: ['admin']
+      security:
+       - oauth2: ['admin']
 
 securityDefinitions:
   oauth2:
