@@ -14,7 +14,9 @@ app.config.from_pyfile('/etc/himlar/production.cfg')
 actions = ['create', 'drop']
 
 parser = argparse.ArgumentParser()
-subparser = parser.add_subparsers(title='action')
+subparser = parser.add_subparsers(title='action', dest='action')
+subparser.required = True
+
 for action in actions:
     a = subparser.add_parser(action)
     a.set_defaults(action=action)
