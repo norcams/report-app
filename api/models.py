@@ -17,7 +17,7 @@ class ApiModel(Model):
         return dump
 
     def update(self, attributes):
-        for k, v in attributes.iteritems():
+        for k, v in attributes.items():
             setattr(self, k, v)
 
 # Make user we use our model class
