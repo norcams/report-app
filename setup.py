@@ -18,7 +18,8 @@ config = {
         'bcrypt',
         'PyMySQL',
         'Flask-Cors',
-        'mod-wsgi'
+        'mod-wsgi',
+        'tabulate'
     ],
     'packages': ['api', 'oauth'],
     'scripts': [],

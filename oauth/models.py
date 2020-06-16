@@ -14,4 +14,4 @@ class Tokens(db.Model):
     scope = db.Column(SET('admin', 'read'), server_default=literal('read'))
 
     def __repr__(self):
-        return '<Token %r>' % self.token
+        return '<Token %r>' % self.name
