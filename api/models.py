@@ -53,6 +53,8 @@ class Instance(db.Model):
 
 class Owner(db.Model):
     __tablename__ = 'owners'
+    __table_args__ = {'mysql_engine':'InnoDB'}
+
     ip = db.Column(db.String(16), primary_key=True)
     organization = db.Column(db.String(16), nullable=False)
     project_name = db.Column(db.String(255), nullable=False)

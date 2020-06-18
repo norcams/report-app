@@ -13,6 +13,13 @@ def get_instances(limit, org=None):
         order_by(Instance.timestamp.asc())
     return [s.Owner.join(s.Instance.dump()) for s in instances.all()][:limit]
 
+def get_instance(ip):
+    instance = Owner.query.filter_by(ip=ip).first()
+    if instance:
+        app.logger.info('instance owner found {}'.format(instance.ip))
+        return instance.dump()
+    return NoContent, 404
+
 def put_instance(instance):
     i = Instance.query.filter_by(ip=instance['ip']).first()
     if i is not None:
