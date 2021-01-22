@@ -21,7 +21,7 @@ clean:
 deps:
 	yum install -y gcc rpm-build centos-release-scl
 	yum install -y rh-ruby23 rh-ruby23-ruby-devel httpd-devel
-	source /opt/rh/rh-ruby23/enable; gem install -N fpm
+	source /opt/rh/rh-ruby23/enable; gem install -N fpm --version 1.11.0
 	yum install -y python python3-devel python-virtualenv git libyaml-devel
 
 
