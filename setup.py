@@ -20,6 +20,7 @@ config = {
         'PyMySQL',
         'Flask-Cors',
         'mod-wsgi',
+        'feedgen',
         'tabulate'
     ],
     'packages': ['api', 'oauth'],
