@@ -8,3 +8,6 @@ local/
 lib64
 *.pyc
 package/*.rpm
+pyvenv.cfg
+.pylintrc
+production.cfg

@@ -14,8 +14,12 @@ app = connexion.App(__name__, specification_dir='./')
 
 cors = CORS(app.app, resources={r"/api/v1/status*": {"origins": "*"}})
 
-# Production server config
-app.app.config.from_pyfile('/etc/himlar/production.cfg')
+# See if development config exists
+if os.path.exists("production.cfg"):
+    app.app.config.from_pyfile('production.cfg')
+else:
+    # Production server config
+    app.app.config.from_pyfile('/etc/himlar/production.cfg')
 
 # This will set the need env TOKENINFO_URL from production.cfg
 token_url = app.app.config.get('TOKENINFO_URL')
