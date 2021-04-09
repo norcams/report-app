@@ -2,7 +2,7 @@
 swagger: '2.0'
 info:
   description: NREC report API
-  version: "1.5.0"
+  version: "1.6.0"
   title: NREC report API
 consumes:
   - "application/json"
@@ -223,8 +223,37 @@ paths:
       responses:
         201:
           description: New status message added
-      security:
-       - oauth2: ['admin']
+#      security:
+#       - oauth2: ['admin']
+  /v1/status/rss:
+    get:
+      operationId:  "api.status.get_rss"
+      tags:
+        - Status
+      summary: Get status message
+      description: Get status message
+      produces:
+        - application/xml
+      parameters:
+        - name: limit
+          in: query
+          type: integer
+          minimum: 0
+          default: 10
+        - name: limit_days
+          in: query
+          type: integer
+          minimum: 0
+          default: 365
+          description: Limit messages to newer than this number of days old
+        - name: message_type
+          in: query
+          type: string
+          pattern: "^[a-z]*$"
+      responses:
+        200:
+          description: "Successful RSS operation"
+
   /v1/status/{status_id}:
     delete:
       operationId:  "api.status.delete_status"
