@@ -6,7 +6,7 @@ This is a simple web application for a RESTful API for collecting and querying i
 Development
 -----------
 
-You will need to install python36+ and pyton virtualenv first.
+You will need to install python36+, apache httpd development and pyton virtualenv first.
 
 **Install:**
 
@@ -17,9 +17,12 @@ virtualenv -p /path/to/python3 .
 source bin/activate
 pip install -r requirements.txt
 python setup.py develop
+pip install pylint (optional)
 ```
 
 **Run**:
+
+Create `production.cfg` (see example file) and run:
 
 ```
 python app.py
@@ -33,4 +36,18 @@ curl -X POST -H "Authorization: Bearer xg7ek8fj2HmOk3Qff95pgbmQCv4ZpGeH" \
 -H 'Accept: application/problem+json' \
 -d '{"message": "The new gold image for Fedora 56 is now available", "message_type": "important" }' \
 'https://report.vagrant.iaas.intern/api/v1/status'
+```
+
+vagrant
+-------
+
+Stop `httpd`and remove `/opt/report-app` and replace with development installation:
+
+```
+git clone https://github.com/norcams/report-app.git /opt/report-app
+cd /op/report-app
+virtualenv-3 -p /bin/python3 .
+source bin/activate
+pip install -r requirements.txt
+python setup.py develop
 ```
