@@ -39,14 +39,18 @@ def get_rss(limit, limit_days, message_type=None):
         status = status.filter(Status.message_type == message_type)
 
     fg = FeedGenerator()
-    fg.title('Some Testfeed')
+    fg.title('NREC Status updates')
     fg.language('en')
     fg.link(href='https://status.nrec.no', length=140)
-    fg.description('test')
+    fg.description('Status messages from NREC')
+    fg.docs('https://report.nrec.no/api/ui/')
+    tz = pytz.timezone('Europe/Oslo')
     for s in status.all()[:limit]:
         fe = fg.add_entry()
         fe.id(str(s.id))
-        fe.title(s.message)
+        fe.title(s.timestamp.strftime("%a, %d %b %Y"))
+        fe.content(s.message)
         fe.category(category=dict({'term': s.message_type}))
-        fe.published(pytz.utc.localize(s.timestamp))
+        fe.published(tz.localize(s.timestamp))
+
     return fg.rss_str(pretty=True), 200
