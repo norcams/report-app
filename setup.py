@@ -16,6 +16,7 @@ config = {
         'flask==1.1.2',
         'connexion[swagger-ui]==2.7.0',
         'Flask-SQLAlchemy==2.5.1',
+        'pytz',
         'bcrypt',
         'PyMySQL',
         'Flask-Cors',
