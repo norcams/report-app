@@ -15,6 +15,7 @@ def get_status(limit, limit_days, message_type=None):
     return [s.dump() for s in status.all()][:limit]
 
 def put_status(status):
+    # pylint: disable=E1101
     app.logger.info('Add status message "%s" ..', status['message'])
     message_type = status.get('message_type', None)
     status = Status(message=status['message'], message_type=message_type)
@@ -23,6 +24,7 @@ def put_status(status):
     return NoContent, 201
 
 def delete_status(status_id):
+    # pylint: disable=E1101
     status = Status.query.filter_by(id=status_id).first()
     if status is not None:
         app.logger.info('Deleting status message with id=%s ..', status_id)
@@ -34,7 +36,7 @@ def delete_status(status_id):
 def get_rss(limit, limit_days, message_type=None):
     start_at = datetime.today() - timedelta(days=limit_days + 1)
     app.logger.info('get_rss: Start set to {}'.format(start_at))
-    status = Status.query.filter(Status.timestamp >= start_at).order_by(Status.timestamp)
+    status = Status.query.filter(Status.timestamp >= start_at).order_by(Status.id.desc())
     if message_type:
         status = status.filter(Status.message_type == message_type)
 

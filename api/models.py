@@ -24,6 +24,7 @@ class ApiModel(Model):
 db = SQLAlchemy(model_class=ApiModel)
 
 class Status(db.Model):
+    # pylint: disable=E1101,R0903
     __message_types = ['info', 'important', 'event']
     __tablename__ = 'status'
     __table_args__ = {'mysql_engine':'InnoDB'}
@@ -37,6 +38,7 @@ class Status(db.Model):
         return '<Status %r>' % self.id
 
 class Instance(db.Model):
+    # pylint: disable=E1101,R0903
     __tablename__ = 'instances'
     __table_args__ = {'mysql_engine':'InnoDB'}
 
@@ -52,6 +54,7 @@ class Instance(db.Model):
         return '<Instance %r>' % self.ip
 
 class Owner(db.Model):
+    # pylint: disable=E1101,R0903
     __tablename__ = 'owners'
     __table_args__ = {'mysql_engine':'InnoDB'}
 
