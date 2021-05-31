@@ -48,7 +48,8 @@ def get_rss(limit, limit_days, message_type=None):
     fg.docs('https://report.nrec.no/api/ui/')
     tz = pytz.timezone('Europe/Oslo')
     for s in status.all()[:limit]:
-        fe = fg.add_entry()
+        app.logger.info("add {}".format(s.id))
+        fe = fg.add_entry(order='append')
         fe.id(str(s.id))
         fe.title(s.timestamp.strftime("%a, %d %b %Y"))
         fe.content(s.message)
