@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 
 """ Manage db tables """
-
+import argparse
+import sys
+import os
 from flask import Flask
 from api.models import db as api
 from oauth.models import db as oauth
-import argparse
-import sys
 
 app = Flask(__name__)
-app.config.from_pyfile('/etc/himlar/production.cfg')
+
+# See if development config exists
+if os.path.exists("production.cfg"):
+    app.config.from_pyfile('production.cfg')
+else:
+    # Production server config
+    app.config.from_pyfile('/etc/himlar/production.cfg')
 
 actions = ['create', 'drop']
 
@@ -20,11 +26,12 @@ subparser.required = True
 for action in actions:
     a = subparser.add_parser(action)
     a.set_defaults(action=action)
-    a.add_argument('name', metavar='dbname')
+    a.add_argument('name', metavar='dbname', help='oauth or api')
 
 options = parser.parse_args()
 
 def action_drop():
+    """ Drop table """
     with app.app_context():
         if options.name == 'oauth':
             oauth.init_app(app)
@@ -36,6 +43,7 @@ def action_drop():
             print('api tables dropped')
 
 def action_create():
+    """ Create table """
     with app.app_context():
         if options.name == 'oauth':
             oauth.init_app(app)
@@ -49,6 +57,6 @@ def action_create():
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    print("Function action_%s not implemented" % options.action)
+    print(f"Function action_{options.action} not implemented")
     sys.exit(1)
 action()
