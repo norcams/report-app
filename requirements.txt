@@ -1,2 +1,12 @@
-pip==21.0.1
-setuptools==54.2.0
+pip
+setuptools
+connexion
+swagger-ui-bundle
+Flask-SQLAlchemy
+Flask-Cors
+PyMySQL
+bcrypt
+pytz
+feedgen
+mod-wsgi
+tabulate

@@ -15,7 +15,7 @@ app = connexion.App(__name__, specification_dir='./')
 cors = CORS(app.app, resources={r"/api/v1/status*": {"origins": "*"}})
 
 # See if development config exists
-if os.path.exists("production.cfg"):
+if os.path.exists("./production.cfg"):
     app.app.config.from_pyfile('production.cfg')
 else:
     # Production server config
@@ -30,8 +30,12 @@ if token_url:
 os.environ['REQUESTS_CA_BUNDLE'] = '/etc/pki/tls/certs/ca-bundle.crt'
 
 # Read the api.yaml file to configure the endpoints
-app.add_api('api/api.yaml', strict_validation=True, validate_responses=False)
-app.add_api('oauth/oauth2.yaml', strict_validation=True, validate_responses=True)
+options = {"swagger_ui": True, 'swagger_url': '/'}
+app.add_api('api/openapi-v1.yaml', base_path='/api/v1',  options=options,
+            strict_validation=True, validate_responses=True)
+
+#app.add_api('api/api.yaml', strict_validation=True, validate_responses=False)
+#app.add_api('oauth/oauth2.yaml', strict_validation=True, validate_responses=True)
 
 # Database setup - this will make import db work inside packages without more sql config
 oauth_db.init_app(app.app)
@@ -41,7 +45,7 @@ api_db.init_app(app.app)
 @app.route("/")
 def docs():
     output = "<h2>UH-IaaS report rest API server</h2>"
-    output += '<ul><li><a href=/api/ui>report api docs</a></li>'
+    output += '<ul><li><a href=/api/v1>report api v1 docs</a></li>'
     output += '<li><a href=/oauth2/ui>oauth docs</a></li></ul>'
     return output
 
