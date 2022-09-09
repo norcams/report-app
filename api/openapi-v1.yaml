@@ -34,6 +34,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/instance_with_owner'
+
+        204:
+          description: No instances found
       security:
       - oauth2:
         - read
