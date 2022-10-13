@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from .models import db
 from .models import Status
 from feedgen.feed import FeedGenerator
+from flask import request
 import pytz
 
 def get_status(limit, limit_days, message_type=None):
@@ -14,8 +15,9 @@ def get_status(limit, limit_days, message_type=None):
         status = status.filter(Status.message_type == message_type)
     return [s.dump() for s in status.all()][:limit]
 
-def put_status(status):
+def put_status():
     # pylint: disable=E1101
+    status = request.json
     app.logger.info('Add status message "%s" ..', status['message'])
     message_type = status.get('message_type', None)
     status = Status(message=status['message'], message_type=message_type)
