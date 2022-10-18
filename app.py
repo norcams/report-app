@@ -34,8 +34,8 @@ options = {"swagger_ui": True, 'swagger_url': '/'}
 app.add_api('api/openapi-v1.yaml', base_path='/api/v1',  options=options,
             strict_validation=True, validate_responses=True)
 
-#app.add_api('api/api.yaml', strict_validation=True, validate_responses=False)
-#app.add_api('oauth/oauth2.yaml', strict_validation=True, validate_responses=True)
+app.add_api('oauth/openapi.yaml', base_path='/oauth2',  options=options,
+            strict_validation=True, validate_responses=True)
 
 # Database setup - this will make import db work inside packages without more sql config
 oauth_db.init_app(app.app)
@@ -46,7 +46,7 @@ api_db.init_app(app.app)
 def docs():
     output = "<h2>UH-IaaS report rest API server</h2>"
     output += '<ul><li><a href=/api/v1>report api v1 docs</a></li>'
-    output += '<li><a href=/oauth2/ui>oauth docs</a></li></ul>'
+    output += '<li><a href=/oauth2>oauth docs</a></li></ul>'
     return output
 
 @app.route("/health")

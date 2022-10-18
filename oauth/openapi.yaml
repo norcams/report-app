@@ -1,0 +1,52 @@
+openapi: 3.0.1
+info:
+  title: Simple OAuth Bearer Token Info
+  version: 1.0.0
+servers:
+- url: /oauth2
+paths:
+  /tokeninfo:
+    get:
+      summary: OAuth2 token info
+      operationId: oauth.basic.get_tokeninfo
+      responses:
+        200:
+          description: Token info object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+  /token:
+    get:
+      summary: OAuth2 token
+      operationId: oauth.basic.token
+      responses:
+        200:
+          description: Not implemented
+          content: {}
+  /dialog:
+    get:
+      summary: OAuth2 dialog
+      operationId: oauth.basic.dialog
+      responses:
+        200:
+          description: Not implemented
+          content: {}
+components:
+  schemas:
+    token:
+      type: object
+      properties:
+        uid:
+          type: string
+          description: username
+        scope:
+          type: array
+          description: scope for this user
+          items:
+            type: string
+      description: Token info object
+      example:
+        uid: himlarcli
+        scope:
+        - admin
