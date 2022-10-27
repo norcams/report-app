@@ -47,7 +47,6 @@ build:
 	# version file
 	cd  /vendor/${NAME}; echo "commit: `git log --pretty=format:'%h' -n 1`" > /installdir${INSTALL_DIR}/version.yaml
 	echo "version: ${VERSION}" >> /installdir${INSTALL_DIR}/version.yaml
-	rm -rf /installdir/usr
 
 .PHONY: rpm
 rpm:
