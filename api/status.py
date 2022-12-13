@@ -8,6 +8,9 @@ from flask import request
 import pytz
 
 def get_status(limit, limit_days, message_type=None):
+    """ Get list of messages limited by number or days
+        limit
+    """
     start_at = datetime.today() - timedelta(days=limit_days + 1)
     app.logger.info('Start at set to {}'.format(start_at))
     status = Status.query.filter(Status.timestamp >= start_at).order_by(Status.id.desc())
