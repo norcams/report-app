@@ -6,6 +6,7 @@ import sys
 import random
 import string
 import bcrypt
+import os
 from flask import Flask
 from oauth.models import db
 from oauth.models import Tokens
@@ -14,7 +15,13 @@ import argparse
 from tabulate import tabulate
 
 app = Flask(__name__)
-app.config.from_pyfile('/etc/himlar/production.cfg')
+
+# See if development config exists
+if os.path.exists("production.cfg"):
+    app.config.from_pyfile('production.cfg')
+else:
+    # Production server config
+    app.config.from_pyfile('/etc/himlar/production.cfg')
 
 actions = ['create', 'delete', 'list']
 
@@ -28,7 +35,7 @@ for action in actions:
     if action != 'list':
         a.add_argument('name', metavar='username')
     if action == 'create':
-        a.add_argument('scope', metavar='scope', nargs='+', default='read')
+        a.add_argument('scope', metavar='scope', nargs='+', default='read', help='read or admin')
 options = parser.parse_args()
 
 def action_create():

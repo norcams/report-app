@@ -3,6 +3,7 @@ from .models import db
 from .models import Instance
 from .models import Owner
 from connexion import NoContent
+from flask import request
 import datetime
 
 def get_instances(limit, org=None):
@@ -11,7 +12,10 @@ def get_instances(limit, org=None):
         queries.append(Owner.organization == org)
     instances = db.session.query(Owner, Instance).filter(*queries). \
         order_by(Instance.timestamp.asc())
-    return [s.Owner.join(s.Instance.dump()) for s in instances.all()][:limit]
+    if instances.first():
+        return [s.Owner.join(s.Instance.dump()) for s in instances.all()][:limit], 200
+    else:
+        return NoContent, 204
 
 def get_instance(ip):
     instance = Owner.query.filter_by(ip=ip).first()
@@ -20,7 +24,8 @@ def get_instance(ip):
         return instance.dump()
     return NoContent, 404
 
-def put_instance(instance):
+def put_instance():
+    instance = request.json
     i = Instance.query.filter_by(ip=instance['ip']).first()
     if i is not None:
         app.logger.info('Updating instance with ip %s ..', instance['ip'])

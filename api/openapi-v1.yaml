@@ -1,0 +1,309 @@
+openapi: 3.0.1
+info:
+  title: NREC report API
+  description: NREC report API
+  version: '2.0'
+servers:
+- url: /api
+paths:
+  /instance:
+    get:
+      tags:
+      - Instance
+      summary: Get instance reports
+      description: Get the list of instances
+      operationId: api.instance.get_instances
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          default: 10
+      - name: org
+        in: query
+        schema:
+          maxLength: 32
+          minLength: 1
+          pattern: ^[a-z]*$
+          type: string
+      responses:
+        200:
+          description: Successful read instance with owner report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/instance_with_owner'
+
+        204:
+          description: No instances found
+      security:
+      - oauth2:
+        - read
+    post:
+      tags:
+      - Instance
+      summary: Add a new instance report
+      description: This will add a new instance report
+      operationId: api.instance.put_instance
+      requestBody:
+        description: Instance report to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/instance'
+        required: true
+      responses:
+        200:
+          description: Successful updated instance with a new report
+          content: {}
+        201:
+          description: Successful added instance with a new report
+          content: {}
+      x-codegen-request-body-name: instance
+  /instance/{ip}:
+    get:
+      tags:
+      - Instance
+      summary: Get instance owner information
+      description: Get instance owner information
+      operationId: api.instance.get_instance
+      parameters:
+      - name: ip
+        in: path
+        description: private or public IPv4 address
+        required: true
+        schema:
+          pattern: ^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$
+          type: string
+          format: ipv4
+      responses:
+        200:
+          description: Successful read instance owner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/owner'
+        404:
+          description: Instance owner not found
+          content: {}
+      security:
+      - oauth2:
+        - read
+  /status:
+    get:
+      tags:
+      - Status
+      summary: Get status message
+      description: Get status message
+      operationId: api.status.get_status
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          default: 10
+      - name: limit_days
+        in: query
+        description: Limit messages to newer than this number of days old
+        schema:
+          minimum: 0
+          type: integer
+          default: 365
+      - name: message_type
+        in: query
+        schema:
+          pattern: ^[a-z]*$
+          type: string
+      responses:
+        200:
+          description: Successful read status list operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status'
+    post:
+      tags:
+      - Status
+      operationId: api.status.put_status
+      requestBody:
+        description: status report to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/status'
+        required: true
+      responses:
+        201:
+          description: New status message added
+          content: {}
+      security:
+      - oauth2:
+        - admin
+      x-codegen-request-body-name: status
+  /status/rss:
+    get:
+      tags:
+      - Status
+      summary: Get status message
+      description: Get status message
+      operationId: api.status.get_rss
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          default: 10
+      - name: limit_days
+        in: query
+        description: Limit messages to newer than this number of days old
+        schema:
+          minimum: 0
+          type: integer
+          default: 365
+      - name: message_type
+        in: query
+        schema:
+          pattern: ^[a-z]*$
+          type: string
+      responses:
+        200:
+          description: Successful RSS operation
+          content: {}
+  /status/{status_id}:
+    delete:
+      tags:
+      - Status
+      operationId: api.status.delete_status
+      parameters:
+      - name: status_id
+        in: path
+        description: Unique status message id
+        required: true
+        schema:
+          minLength: 1
+          type: integer
+      responses:
+        204:
+          description: status was deleted
+          content: {}
+        404:
+          description: status does not exist
+          content: {}
+      security:
+      - oauth2:
+        - admin
+
+components:
+  schemas:
+    instance:
+      required:
+      - ip
+      - name
+      - updates
+      - uptime
+      type: object
+      properties:
+        ip:
+          maxLength: 15
+          minLength: 7
+          pattern: ^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$
+          type: string
+          description: private or public IPv4 address
+          example: 127.0.0.1
+        name:
+          type: string
+          description: instance hostname
+          example: demo-instance-01
+        uptime:
+          minimum: 0
+          type: integer
+          description: uptime in days
+          example: 10
+        updates:
+          type: integer
+          description: available security updates
+          example: 2
+        kernel:
+          type: string
+          description: kernel version
+          example: 3.13.0-153-generic
+        md5sum:
+          maxLength: 32
+          type: string
+          example: 7899dac95e3d5c85a7a5e86f46c34f6e
+    owner:
+      type: object
+      properties:
+        admin:
+          type: string
+          description: project administrator
+          example: kari.normann@uib.no
+        organization:
+          type: string
+          description: project administrator organization
+          example: uib
+        project_name:
+          type: string
+          description: project name
+          example: uib-ita-application
+        user:
+          type: string
+          description: instance creator
+          example: kari.normann@uib.no
+        timestamp:
+          type: string
+          description: time of last update
+          format: date-time
+          readOnly: true
+          example: 2018-09-04T12:45:00Z
+        instance_id:
+          type: string
+          description: unique instance id
+          example: f57589ac-5e46-4398-a592-9d8ac32f025f
+      description: instance owner information
+    instance_with_owner:
+      allOf:
+      - $ref: '#/components/schemas/instance'
+      - $ref: '#/components/schemas/owner'
+    status:
+      required:
+      - message
+      type: object
+      properties:
+        id:
+          type: integer
+          description: status message unique id
+          readOnly: true
+          example: 1002
+        timestamp:
+          type: string
+          description: timestamp for the status message
+          format: date-time
+          readOnly: true
+        message:
+          type: string
+          description: status message text
+        message_type:
+          maxLength: 16
+          pattern: ^([a-z]{4,10})$
+          type: string
+          description: status message type
+      description: status message object
+      example:
+        id: 1002
+        timestamp: 2018-08-31T08:38:34.000Z
+        message: The new gold image for Fedora 56 is now available
+        message_type: important
+
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://localhost/oauth2/dialog
+          scopes:
+            admin: Admin access to the services
+            read: Read access to the instance service
