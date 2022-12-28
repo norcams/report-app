@@ -1,4 +1,4 @@
-pip
+pip>=21.1
 setuptools>=65.5.1
 connexion
 swagger-ui-bundle
