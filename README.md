@@ -6,7 +6,7 @@ This is a simple web application for a RESTful API for collecting and querying i
 Development
 -----------
 
-You will need to install python36+, apache httpd development and pyton virtualenv first.
+You will need to install python39+, apache httpd development and pyton virtualenv first.
 
 **Install:**
 
