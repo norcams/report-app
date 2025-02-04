@@ -2,7 +2,8 @@ import datetime
 from sqlalchemy.dialects.mysql import SET
 from sqlalchemy import literal
 
-db = SQLAlchemy()
+# use db object from api (not advised to use more than one db per app)
+from api.models import db
 
 class Tokens(db.Model):
     # pylint: disable=R0903
