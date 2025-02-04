@@ -1,89 +1,29 @@
-import os
-import json
-import socket
-import connexion
-import yaml
-import pymysql
-from flask_cors import CORS
-from flask import request
-from flask import Response
-from api.models import db as api_db
-from oauth.models import db as oauth_db
+import pages
+import config as config
+from connexion import FlaskApp
+from api.models import db
 
-app = connexion.App(__name__, specification_dir='./')
+api_app = FlaskApp(__name__)
 
-cors = CORS(app.app, resources={r"/api/v1/status*": {"origins": "*"}})
+config.load_config(api_app.app)
+api_app.app.register_blueprint(pages.simple_pages)
+db.init_app(api_app.app)
 
-# See if development config exists
-if os.path.exists("./production.cfg"):
-    app.app.config.from_pyfile('production.cfg')
-else:
-    # Production server config
-    app.app.config.from_pyfile('/etc/himlar/production.cfg')
-
-# This will set the need env TOKENINFO_URL from production.cfg
-token_url = app.app.config.get('TOKENINFO_URL')
-if token_url:
-    os.environ['TOKENINFO_URL'] = token_url
-
-# requests will not use the default distro ca-bundle (with our own ca added)
-os.environ['REQUESTS_CA_BUNDLE'] = '/etc/pki/tls/certs/ca-bundle.crt'
-
-# Read the api.yaml file to configure the endpoints
-options = {"swagger_ui": True, 'swagger_url': '/'}
-app.add_api('api/openapi-v1.yaml', base_path='/api/v1',  options=options,
+# Read the yaml file to configure the endpoints
+api_app.add_api('api/openapi-v1.yaml', base_path='/api/v1', swagger_ui_options=config.options,
             strict_validation=True, validate_responses=True)
 
-app.add_api('oauth/openapi.yaml', base_path='/oauth2',  options=options,
+api_app.add_api('oauth/openapi.yaml', base_path='/oauth2', swagger_ui_options=config.options,
             strict_validation=True, validate_responses=True)
 
-# Database setup - this will make import db work inside packages without more sql config
-oauth_db.init_app(app.app)
-api_db.init_app(app.app)
-
-# Default landing page
-@app.route("/")
-def docs():
-    output = "<h2>UH-IaaS report rest API server</h2>"
-    output += '<ul><li><a href=/api/v1>report api v1 docs</a></li>'
-    output += '<li><a href=/oauth2>oauth docs</a></li></ul>'
-    return output
-
-@app.route("/health")
-def health():
-    version = 'version.yaml'
-    script_dir = os.path.dirname(__file__)
-    abs_file_path = os.path.join(script_dir, version)
-    with open(abs_file_path, 'r') as stream:
-        try:
-            output = yaml.full_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-            output = dict()
-    # check db health
-    try:
-        api_db.engine.execute('SELECT 1')
-        code = 200
-        output['database'] = 'ok'
-    except Exception as e:
-        output['database'] = 'error'
-        code = 503
-    if request.headers.get("X-Forwarded-For"):
-        output['remote_addr'] = request.headers.get("X-Forwarded-For")
-    else:
-        output['remote_addr'] = request.remote_addr
-    output['host'] = socket.gethostname()
-    msg = json.dumps(output, sort_keys=True, indent=4)
-    return Response(msg, mimetype='text/json', status=code)
-
-@app.app.teardown_appcontext
+@api_app.app.teardown_appcontext
 def shutdown_session(exception=None):
-    oauth_db.session.remove()
-    api_db.session.remove()
-    app.app.logger.debug('close db session')
+    db.session.remove()
+    api_app.app.logger.debug('close db session')
 
+# this is only used for running in standalone cli development mode
 if __name__ == '__main__':
-    host = app.app.config.get('HOST', '0.0.0.0')
-    debug = app.app.config.get('DEBUG', False)
-    port = app.app.config.get('PORT', 5000)
-    app.run(host=host, port=port, debug=debug)
+    host = api_app.app.config.get('HOST', '0.0.0.0')
+    log_level = api_app.app.config.get('LOG_LEVEL', 'info') # only uvicorn level
+    port = api_app.app.config.get('PORT', 5000)
+    api_app.run("app:api_app", host=host, log_level=log_level, port=int(port), reload=True)

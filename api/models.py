@@ -1,7 +1,8 @@
 from datetime import datetime
-from flask_sqlalchemy import Model, SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
 
-class ApiModel(Model):
+class ApiModel(DeclarativeBase):
     """ Model class for all our models.
         This will included shared functions. """
 

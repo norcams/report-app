@@ -1,12 +1,12 @@
-pip>=21.1
-setuptools>=65.5.1
+pip
 connexion
-swagger-ui-bundle
+connexion[flask]
+connexion[uvicorn]
+connexion[swagger-ui]
 Flask-SQLAlchemy
 Flask-Cors
 PyMySQL
 bcrypt
 pytz
 feedgen
-mod-wsgi
 tabulate
