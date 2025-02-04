@@ -1,18 +1,19 @@
+from datetime import datetime, timedelta
+import pytz
 from connexion import NoContent
 from flask import current_app as app
-from datetime import datetime, timedelta
+from flask import request
+from feedgen.feed import FeedGenerator
 from .models import db
 from .models import Status
-from feedgen.feed import FeedGenerator
-from flask import request
-import pytz
+
 
 def get_status(limit, limit_days, message_type=None):
     """ Get list of messages limited by number or days
         limit
     """
     start_at = datetime.today() - timedelta(days=limit_days + 1)
-    app.logger.info('Start at set to {}'.format(start_at))
+    app.logger.info(f'Start at set to {start_at}')
     status = Status.query.filter(Status.timestamp >= start_at).order_by(Status.id.desc())
     if message_type:
         status = status.filter(Status.message_type == message_type)
@@ -40,7 +41,7 @@ def delete_status(status_id):
 
 def get_rss(limit, limit_days, message_type=None):
     start_at = datetime.today() - timedelta(days=limit_days + 1)
-    app.logger.info('get_rss: Start set to {}'.format(start_at))
+    app.logger.info(f'get_rss: Start set to {start_at}')
     status = Status.query.filter(Status.timestamp >= start_at).order_by(Status.id.desc())
     if message_type:
         status = status.filter(Status.message_type == message_type)
@@ -53,7 +54,7 @@ def get_rss(limit, limit_days, message_type=None):
     fg.docs('https://report.nrec.no/api/ui/')
     tz = pytz.timezone('Europe/Oslo')
     for s in status.all()[:limit]:
-        app.logger.info("add {}".format(s.id))
+        app.logger.info(f"add {s.id}")
         fe = fg.add_entry(order='append')
         fe.id(str(s.id))
         fe.title(s.timestamp.strftime("%a, %d %b %Y"))

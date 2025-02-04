@@ -16,7 +16,7 @@ def get_tokeninfo():
         for user in users:
             if bcrypt.checkpw(access_token.encode('utf8'), user.token_hash.encode('utf8')):
                 auth_user = user
-                app.logger.debug('user authentication for {}'.format(user.name))
+                app.logger.debug(f'user authentication for {user.name}')
                 break
 
     if not auth_user:

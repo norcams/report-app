@@ -1,10 +1,10 @@
+import datetime
+from flask import request
 from flask import current_app as app
+from connexion import NoContent
 from .models import db
 from .models import Instance
 from .models import Owner
-from connexion import NoContent
-from flask import request
-import datetime
 
 def get_instances(limit, org=None):
     queries = [Owner.ip == Instance.ip]
@@ -14,13 +14,12 @@ def get_instances(limit, org=None):
         order_by(Instance.timestamp.asc())
     if instances.first():
         return [s.Owner.join(s.Instance.dump()) for s in instances.all()][:limit], 200
-    else:
-        return NoContent, 204
+    return NoContent, 204
 
 def get_instance(ip):
     instance = Owner.query.filter_by(ip=ip).first()
     if instance:
-        app.logger.info('instance owner found {}'.format(instance.ip))
+        app.logger.info(f'instance owner found {instance.ip}')
         return instance.dump()
     return NoContent, 404
 
