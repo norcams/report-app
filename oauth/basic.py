@@ -24,7 +24,8 @@ def get_tokeninfo():
         return 'No such bearer token', 401
     return {'uid': auth_user.name, 'scope': list(auth_user.scope)}, 200
 
-def dialog():
+def dialog(state, client_id, response_type, redirect_uri, scope):
+    #pylint: disable=W0613
     return 'Not implemented', 200
 
 def token():

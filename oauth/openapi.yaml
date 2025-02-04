@@ -28,6 +28,37 @@ paths:
     get:
       summary: OAuth2 dialog
       operationId: oauth.basic.dialog
+      parameters:
+        - name: client_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: scope
+          in: query
+          schema:
+            maxLength: 12
+            minLength: 1
+            pattern: ^[a-z]*$
+            type: string
+        - name: response_type
+          in: query
+          schema:
+            maxLength: 12
+            minLength: 1
+            pattern: ^[a-z]*$
+            type: string
+        - name: redirect_uri
+          in: query
+          schema:
+            type: string
+            format: uri
+        - name: state
+          in: query
+          schema:
+            type: string
+            format: uuid
+
       responses:
         200:
           description: Not implemented
