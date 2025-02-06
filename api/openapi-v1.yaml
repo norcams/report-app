@@ -1,8 +1,8 @@
-openapi: 3.0.1
+openapi: 3.0.4
 info:
   title: NREC report API
   description: NREC report API
-  version: '2.0'
+  version: '2.1'
 servers:
 - url: /api
 paths:
@@ -34,7 +34,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/instance_with_owner'
-
         204:
           description: No instances found
       security:
