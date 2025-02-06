@@ -234,6 +234,12 @@ components:
           maxLength: 32
           type: string
           example: 7899dac95e3d5c85a7a5e86f46c34f6e
+        last_script_run:
+          type: string
+          description: last time the collection script was run
+          format: date-time
+          readOnly: true
+          example: 2018-09-04T12:45:00Z
     owner:
       type: object
       properties:
@@ -253,21 +259,33 @@ components:
           type: string
           description: instance creator
           example: kari.normann@uib.no
-        timestamp:
+        last_sync:
           type: string
-          description: time of last update
+          description: last time the sync for this instance was run
           format: date-time
-          readOnly: true
           example: 2018-09-04T12:45:00Z
+        created:
+          type: string
+          description: creation time for the instance
+          format: date-time
+          example: 2017-01-14T12:05:00Z
         instance_id:
           type: string
           description: unique instance id
           example: f57589ac-5e46-4398-a592-9d8ac32f025f
+        status:
+          type: string
+          description: instance status
+          example: shutoff
       description: instance owner information
     instance_with_owner:
-      allOf:
-      - $ref: '#/components/schemas/instance'
-      - $ref: '#/components/schemas/owner'
+      type: array
+      #additionalProperties: false
+      #unevaluatedProperties: false
+      items:
+        allOf:
+          - $ref: '#/components/schemas/owner'
+          - $ref: '#/components/schemas/instance'
     status:
       required:
       - message

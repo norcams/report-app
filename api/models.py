@@ -49,7 +49,7 @@ class Instance(db.Model):
     md5sum = db.Column(db.String(32))
     updates = db.Column(db.Integer, nullable=False)
     uptime = db.Column(db.Integer, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.now)
+    last_script_run = db.Column(db.DateTime, default=datetime.now, nullable=False)
 
     def __repr__(self):
         return '<Instance %r>' % self.ip
@@ -64,8 +64,10 @@ class Owner(db.Model):
     project_name = db.Column(db.String(255), nullable=False)
     admin = db.Column(db.String(255))
     user = db.Column(db.String(255))
-    timestamp = db.Column(db.DateTime, default=datetime.now)
+    last_sync = db.Column(db.DateTime, default=datetime.now, nullable=False)
+    created = db.Column(db.DateTime, nullable=False)
     instance_id = db.Column(db.String(63))
+    status = db.Column(db.String(16), nullable=False)
 
     def __repr__(self):
         return '<Owner %r>' % self.project_name
