@@ -26,6 +26,9 @@ def get_instance(ip):
 def put_instance():
     instance = request.json
     i = Instance.query.filter_by(ip=instance['ip']).first()
+    if app.config.get('ENV') != 'development':
+        # TODO: validate request.remote_addr or forwardfor
+        pass
     if i is not None:
         app.logger.info('Updating instance with ip %s ..', instance['ip'])
         instance['last_script_run'] = datetime.datetime.now()
