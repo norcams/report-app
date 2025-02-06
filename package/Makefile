@@ -23,7 +23,7 @@ clean:
 deps:
 	dnf module reset ruby -y
 	dnf install -y @ruby:3.3
-	dnf install -y gcc rpm-build ruby-devel python3.11-devel
+	dnf install -y gcc rpm-build ruby-devel python3.12-devel
 	gem install -N fpm #--version 1.11.0
 
 .PHONY: build
@@ -33,10 +33,10 @@ build:
 
 	cd /vendor; git clone -b ${GIT_REF} ${URL}
 	rsync -avh --exclude '.git' /vendor/${NAME}/ ${INSTALL_DIR}
-	cd ${INSTALL_DIR}; python3.11 -m venv .
+	cd ${INSTALL_DIR}; python3.12 -m venv .
 	cd ${INSTALL_DIR}; bin/pip install --upgrade pip
 	cd ${INSTALL_DIR}; bin/pip install -r requirements.txt
-	#cd /installdir${INSTALL_DIR}; virtualenv --relocatable -p /bin/python3.11 .
+	#cd /installdir${INSTALL_DIR}; virtualenv --relocatable -p /bin/python3.12 .
 	# Hack
 	# echo "${INSTALL_DIR}" > /installdir${INSTALL_DIR}/lib/python2.7/site-packages/report_api.egg-link
 	# sed -i 's/\/installdir\/opt/\/opt/g' /installdir${INSTALL_DIR}/bin/activate
