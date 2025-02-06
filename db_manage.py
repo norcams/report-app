@@ -8,6 +8,9 @@ from flask import Flask
 from api.models import db as api
 from oauth.models import db as oauth
 
+from alembic.config import Config
+from alembic import command
+
 app = Flask(__name__)
 
 # See if development config exists
@@ -53,6 +56,10 @@ def action_create():
             api.init_app(app)
             api.create_all()
             print('api tables created')
+    # load the Alembic configuration and generate the
+    # "stamping" it with the most recent rev:
+    alembic_cfg = Config("alembic.ini")
+    command.stamp(alembic_cfg, "head")
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))

@@ -6,6 +6,7 @@ connexion[swagger-ui]
 Flask-SQLAlchemy
 Flask-Cors
 PyMySQL
+alembic
 bcrypt
 pytz
 feedgen
