@@ -3,7 +3,7 @@ from connexion.options import SwaggerUIOptions
 from flask_cors import CORS
 
 # requests will not use the default distro ca-bundle (with our own ca added)
-os.environ['REQUESTS_CA_BUNDLE'] = '/etc/pki/tls/certs/ca-bundle.crt'
+os.environ['SSL_CERT_FILE'] = '/etc/pki/tls/certs/ca-bundle.crt'
 
 # config swagger
 options = SwaggerUIOptions(
