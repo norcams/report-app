@@ -1,5 +1,5 @@
 NAME=report-app
-VERSION=2.1.0
+VERSION=2.1.1
 PACKAGE_VERSION=1
 DESCRIPTION="Simple REST API for NREC"
 URL="https://github.com/norcams/report-app"
