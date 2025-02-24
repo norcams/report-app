@@ -44,8 +44,8 @@ class Instance(db.Model):
     __table_args__ = {'mysql_engine':'InnoDB'}
 
     ip = db.Column(db.String(16), primary_key=True)
-    name = db.Column(db.String(127), nullable=False)
-    kernel = db.Column(db.String(127))
+    name = db.Column(db.String(255), nullable=False)
+    kernel = db.Column(db.String(255))
     md5sum = db.Column(db.String(32))
     updates = db.Column(db.Integer, nullable=False)
     uptime = db.Column(db.Integer, nullable=False)

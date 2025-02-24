@@ -214,6 +214,7 @@ components:
           example: 127.0.0.1
         name:
           type: string
+          maxLength: 255
           description: instance hostname
           example: demo-instance-01
         uptime:
@@ -227,6 +228,7 @@ components:
           example: 2
         kernel:
           type: string
+          maxLength: 255
           description: kernel version
           example: 3.13.0-153-generic
         md5sum:
