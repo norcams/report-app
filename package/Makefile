@@ -37,7 +37,7 @@ build:
 	cd ${INSTALL_DIR}; bin/pip install --upgrade pip
 	cd ${INSTALL_DIR}; bin/pip install -r requirements.txt
 	# temp fix for this issue: https://github.com/spec-first/connexion/issues/2029
-	cd /vendor; patch -t -d /opt/report-app/lib/python3.12/site-packages connexion/spec.py < patch/connexion_bb48fb3
+	cd /vendor/${NAME}/package; patch -t -d /opt/report-app/lib/python3.12/site-packages connexion/spec.py < patch/connexion_bb48fb3
 	# version file
 	cd  /vendor/${NAME}; echo "commit: `git log --pretty=format:'%h' -n 1`" > ${INSTALL_DIR}/version.yaml
 	echo "version: ${VERSION}" >> ${INSTALL_DIR}/version.yaml
