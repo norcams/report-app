@@ -1,5 +1,5 @@
 NAME=report-app
-VERSION=2.1.2
+VERSION=2.1.3
 PACKAGE_VERSION=1
 DESCRIPTION="Simple REST API for NREC"
 URL="https://github.com/norcams/report-app"
@@ -36,10 +36,8 @@ build:
 	cd ${INSTALL_DIR}; python3.12 -m venv .
 	cd ${INSTALL_DIR}; bin/pip install --upgrade pip
 	cd ${INSTALL_DIR}; bin/pip install -r requirements.txt
-	#cd /installdir${INSTALL_DIR}; virtualenv --relocatable -p /bin/python3.12 .
-	# Hack
-	# echo "${INSTALL_DIR}" > /installdir${INSTALL_DIR}/lib/python2.7/site-packages/report_api.egg-link
-	# sed -i 's/\/installdir\/opt/\/opt/g' /installdir${INSTALL_DIR}/bin/activate
+	# temp fix for this issue: https://github.com/spec-first/connexion/issues/2029
+	cd /vendor; patch -t -d /opt/report-app/lib/python3.12/site-packages connexion/spec.py < patch/connexion_bb48fb3
 	# version file
 	cd  /vendor/${NAME}; echo "commit: `git log --pretty=format:'%h' -n 1`" > ${INSTALL_DIR}/version.yaml
 	echo "version: ${VERSION}" >> ${INSTALL_DIR}/version.yaml
