@@ -247,6 +247,7 @@ components:
       properties:
         admin:
           type: string
+          nullable: true
           description: project administrator
           example: kari.normann@uib.no
         organization:
@@ -259,6 +260,7 @@ components:
           example: uib-ita-application
         user:
           type: string
+          nullable: true
           description: instance creator
           example: kari.normann@uib.no
         last_sync:
