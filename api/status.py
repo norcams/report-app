@@ -17,6 +17,9 @@ def get_status(limit, limit_days, message_type=None):
     status = Status.query.filter(Status.timestamp >= start_at).order_by(Status.id.desc())
     if message_type:
         status = status.filter(Status.message_type == message_type)
+    if status.count() == 0:
+        return NoContent, 404
+    app.logger.info(f'Total rows in query {status.count()}')
     return [s.dump() for s in status.all()][:limit]
 
 def put_status():

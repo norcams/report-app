@@ -121,7 +121,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/status'
+                type: array
+                items:
+                  $ref: '#/components/schemas/status'
+        404:
+          description: status does not exist
+          content: {}
     post:
       tags:
       - Status
