@@ -1,10 +1,10 @@
 NAME=report-app
-VERSION=2.1.4
+VERSION=2.2.0
 PACKAGE_VERSION=1
 DESCRIPTION="Simple REST API for NREC"
 URL="https://github.com/norcams/report-app"
 MAINTAINER="https://github.com/norcams"
-RELVERSION=8
+RELVERSION=9
 INSTALL_DIR=/opt/report-app
 GIT_REF=master
 
@@ -36,8 +36,6 @@ build:
 	cd ${INSTALL_DIR}; python3.12 -m venv .
 	cd ${INSTALL_DIR}; bin/pip install --upgrade pip
 	cd ${INSTALL_DIR}; bin/pip install -r requirements.txt
-	# temp fix for this issue: https://github.com/spec-first/connexion/issues/2029
-	cd /vendor/${NAME}/package; patch -t -d /opt/report-app/lib/python3.12/site-packages connexion/spec.py < patch/connexion_bb48fb3
 	# version file
 	cd  /vendor/${NAME}; echo "commit: `git log --pretty=format:'%h' -n 1`" > ${INSTALL_DIR}/version.yaml
 	echo "version: ${VERSION}" >> ${INSTALL_DIR}/version.yaml
