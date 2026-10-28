@@ -21,6 +21,7 @@ def get_instance(ip):
     if instance:
         app.logger.info(f'instance owner found {instance.ip}')
         return instance.dump()
+    app.logger.info(f'no instance owner found for {ip}')
     return NoContent, 404
 
 def put_instance():
