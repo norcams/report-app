@@ -25,6 +25,7 @@ deps:
 	dnf install -y @ruby:3.3
 	dnf install -y gcc rpm-build ruby-devel python3.12-devel
 	gem install -N fpm #--version 1.11.0
+	gem install -N json
 
 .PHONY: build
 build:
